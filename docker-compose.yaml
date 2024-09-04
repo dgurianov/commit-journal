@@ -1,0 +1,14 @@
+version: '3'
+services:
+  spring-boot-app:
+      build:
+        context: ./commit-journal-backend
+        dockerfile: Dockerfile
+      ports:
+        - "8080:8080"
+  react-app:
+      build:
+        context: ./commit-journal
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
