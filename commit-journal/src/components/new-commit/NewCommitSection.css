@@ -1,0 +1,32 @@
+.app-new{
+    grid-area: n;
+    display: grid;
+    grid-template: repeat(6 1fr) / 1fr 8fr ;
+    font-size: small;
+  }
+  
+   .app-new-line-name{
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    text-align: left;
+    margin: 7px;
+  }
+  
+   .app-new-line-input{
+    display: grid;
+    width: auto;
+    grid-column: 2 / span 6;
+    margin: 7px;
+  }
+  
+  .app-new-line-button{
+    display: grid;
+    height: 30px;
+    padding: 5px;
+    
+    width: 90px;
+    grid-column: 5 / span 1;
+    text-align: center;
+  }
+  
