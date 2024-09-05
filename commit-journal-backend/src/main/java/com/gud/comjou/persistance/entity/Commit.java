@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gud.comjou.persistance.EntitySupport;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -47,6 +48,7 @@ public class Commit{
     @Size(min = 4, message = "Repo id at least 4 chars")
     private String repoId;
 
+    @Column(length = 3000 )
     @Size(min = 4, message = "Description  at least x chars")
     private String description;
 
