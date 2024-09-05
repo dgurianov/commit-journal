@@ -1,6 +1,21 @@
 services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_USER: commju_user
+      MYSQL_PASSWORD: commju_user_password
+      MYSQL_DATABASE: commitjournal
   spring-boot-app:
       build:
         context: .
       ports:
         - "8080:8080"
+      depends_on:
+        - mysql
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/commitjournal
+        SPRING_DATASOURCE_USERNAME: commju_user
+        SPRING_DATASOURCE_PASSWORD: commju_user_password
