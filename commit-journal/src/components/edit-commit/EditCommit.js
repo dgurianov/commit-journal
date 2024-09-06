@@ -1,116 +1,78 @@
 
 import { useRecoilState } from "recoil";
 import { commitStateBucket, tagsStateBucket } from "../../state/cjournalState";
-import { useState } from "react";
 import AxiosClient from "../backend-client/AxiosClient";
+import { useForm } from "react-hook-form";
 
 const EditCommit = ({originalCommit,setShowEdit}) => {
 
 
     const [commitsBucket, setCommitsBucket] = useRecoilState(commitStateBucket);
     const [tagsBasket,setTagsBasket] = useRecoilState(tagsStateBucket);
-    const [newCommit , setNewCommit] = useState({
-            "commitId": originalCommit.commitId,
+
+    const {register, formState:{isDirty,},handleSubmit} = useForm({
+            defaultValues: {
+                "commitId": originalCommit.commitId,
             "userName": originalCommit.userName,
             "repoId": originalCommit.repoId,
             "tags": originalCommit.tags,
             "description": originalCommit.description
-    });
-    const [hasChanged, setHasChanged] = useState(false);
-
-
-    const handleSubmit = (event) => {
-        if(hasChanged){
-
-        const pushCommitToBackend = async () => {
-            try{
-                const {data} = await AxiosClient.put('/api/v1/commit/',JSON.stringify([newCommit]),{headers: {
-                    "Content-Type": "application/json"}});
-                console.log(data);
-                const newTags = new Set(tagsBasket);
-                data[0].tags.forEach(newTag => {
-                    newTags.add(newTag.id);
-                });
-                setTagsBasket([...newTags]);
-                const survivals = commitsBucket.filter((commit)=>commit.commitId !==  newCommit.commitId); 
-                setCommitsBucket([...survivals,newCommit]);
-            }catch (error){
-                console.log(error);
             }
-    
-            // 
-            // console.log(newCommit);
+        });
+
+    const onSubmit = (formData) => {
+        if(isDirty){
+            const pushCommitToBackend = async () => {
+                try{
+                    const {data} = await AxiosClient.put('/api/v1/commit/',JSON.stringify([formData]),{headers: {
+                        "Content-Type": "application/json"}});
+                    console.log(data);
+                    const newTags = new Set(tagsBasket);
+                    data[0].tags.forEach(newTag => {
+                        newTags.add(newTag.id);
+                    });
+                    setTagsBasket([...newTags]);
+                    const survivals = commitsBucket.filter((commit)=>commit.commitId !==  formData.commitId); 
+                    setCommitsBucket([...survivals,formData]);
+                }catch (error){
+                    console.log(error);
+                }
+        
+            }
+            pushCommitToBackend();
         }
-        pushCommitToBackend();
-    }
         setShowEdit(0);
-    
-
-
     }
-
 
     const handleCancel = () => {setShowEdit(0);}
 
-    const handleChange = (event) => {
-        switch(event.target.name){
-            case "userName":
-                newCommit.userName = event.target.value;
-                console.log("userNAme");
-                setHasChanged(true);
-                break;
-            case "repoId":
-                newCommit.repoId = event.target.value;
-                console.log("repoId");
-                setHasChanged(true);
-                break;
-            case "descr":
-                newCommit.description = event.target.value;
-                console.log("descr");
-                setHasChanged(true);
-                break;
-            case "tags":
-                newCommit.tags = event.target.value.split(" ").map((tagWord)=> {return {"id":tagWord}});
-                console.log("tags");
-                setHasChanged(true);
-                break;
-            default:
-                console.log("Not actionable switch value.");
-                break;
-        }
-
-        setNewCommit({...newCommit});
-       
-
-    }
-
-     return(
-        <div className="card mb-3 p-2">
+    return(
+        <form className="card mb-3 p-2" onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group input-group-sm mb-3 mt-3">
                     <span className="input-group-text" id="inputGroup-sizing-sm">Commit id</span>
-                    <input type="text"  className="input-group-text"  readOnly={true}   value={newCommit.commitId}/>
+                    <input type="text"  className="form-control"  readOnly={true}   {...register("commitId")}/>
             </div>
             <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text">User</span>
-                <input type="text" className="form-control" placeholder="Username"  onChange={handleChange}  name="userName" value={newCommit.userName}/>
+                <input type="text" className="form-control" id="userName" {...register("userName")} />
                 <span className="input-group-text">@repo</span>
-                <input type="text" className="form-control" placeholder="Repository"   onChange={handleChange} name="repoId" value={newCommit.repoId}  />
+                <input type="text" className="form-control" id="repoId"{...register("repoId")}/>
             </div>
             <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text">Description</span>
-                <textarea className="form-control"  onChange={handleChange} name="descr" value={newCommit.description} ></textarea>
+                <textarea className="form-control"  id="description" {...register("description")} ></textarea>
             </div>
             <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Tags</span>
-                <input type="text"  className="form-control"  onChange={handleChange} name="tags" />
+                <input type="text"  className="form-control" readOnly={true}  id="tags" {...register("tags")}/>
             </div>
             <div className='d-flex justify-content-center '>
-                <button type='submit' className='btn btn-light btn-sm border border-secondary' onClick={handleSubmit}>Save</button>
+                <button className='btn btn-light btn-sm border border-secondary'>Save</button>
                 <span className="mx-1"></span>
-                <button type='submit' className='btn btn-light btn-sm border border-secondary' onClick={handleCancel}>Cancel</button>
+                <button type='button' className='btn btn-light btn-sm border border-secondary' onClick={handleCancel}>Cancel</button>
             </div>
 
-     </div>
+     </form>
      );
 }
 

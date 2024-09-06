@@ -13,20 +13,15 @@ function App() {
 const nbState = useRecoilValue(navBarState);
 const setCommitsBucket = useSetRecoilState(commitStateBucket);
 const setTagsBasket = useSetRecoilState(tagsStateBucket);
-const [fetchState, setFetchState] = useState({
+const [, setFetchState] = useState({
   isLoading: false,
   error: null,
 });
 
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(()=>{fetchData()},[]);
 
 const fetchData = () => {
-
-  /*comm.commits.map((commit)=>{
-      return commit.memoTags.map((elTag)=> {return setOfTags.add(elTag)});
-
-  });*/
 
   const loadCommitsFromBackend = async () => {
     try{
@@ -48,7 +43,6 @@ const fetchData = () => {
         isLoading: false,
           });
           
-    // console.log(data);
     
     }catch(error){
           setFetchState({
