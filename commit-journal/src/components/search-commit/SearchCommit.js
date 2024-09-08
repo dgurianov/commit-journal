@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import './SearchCommit.css';
 import { commitStateBucket } from '../../state/cjournalState';
 import AxiosClient from '../backend-client/AxiosClient';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 
 
@@ -41,14 +41,14 @@ const SearchCommit = () => {
      }
 
     return(
-        <div >
+        <React.Fragment >
             <div className="input-group input-group-sm mb-3 mt-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Text</span>
                 <input type="text"  className="form-control"  onChange={handleChange} name="commitId" />
                 <span className='mx-3'></span>
                 <button type='submit' className='btn btn-light btn-sm border border-secondary' onClick={clickSearch}>Search</button>
             </div>
-        </div>
+        </React.Fragment>
     );
     
 }

@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil';
 import Commit from './Commit';
 import { filteredCommitsState } from '../../state/cjournalState';
 import EditCommit from '../edit-commit/EditCommit';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const ListOfCommits = () => {
     const commitsSelector = useRecoilValue(filteredCommitsState);
@@ -12,9 +12,9 @@ const ListOfCommits = () => {
         <div className='container' >
             {commitsSelector.map((element)=>{
                 return(
-                    <div key={element.id}>
+                    <React.Fragment key={element.id}>
                         {showEdit === element.commitId ?   <EditCommit key={element.id}  originalCommit={element} setShowEdit={setShowEdit}/>: <Commit setShowEdit={setShowEdit} key={element.id}  element={element}/>}
-                        </div>
+                        </React.Fragment>
                         
                     ) ;
 

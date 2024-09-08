@@ -3,6 +3,7 @@ import AxiosClient from '../backend-client/AxiosClient';
 import { useRecoilState } from 'recoil';
 import { commitStateBucket, navBarState, tagsStateBucket } from '../../state/cjournalState';
 import { useForm } from 'react-hook-form';
+import React from 'react';
 
 /*
 Uncomment for devtool
@@ -17,7 +18,9 @@ const NewCommitSection = () => {
         /*Uncomment for DevTool
          control, 
          */
-         handleSubmit} = useForm();
+        handleSubmit,
+        getValues,
+        formState:{errors}} = useForm();
 
     const onSubmit = (formData) => {
         formData.tags = [...formData.tags.split(" ").map((tagWord)=> {return {"id":tagWord}})];
@@ -43,16 +46,31 @@ const NewCommitSection = () => {
     }
 
 
-    return(<div>
+    return(<React.Fragment>
     <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="input-group input-group-sm mb-3 mt-3">
+        <div className="input-group input-group-sm  mt-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Commit id </span>
-                <input type="text" id="commitId" className="form-control" {...register("commitId")} />
+                <input type="text" id="commitId" className="form-control" {...register("commitId",{required: "Commit id is required", minLength: { value:1, message: "Commit id must be at least 1 digit."}})}/>
+               
         </div>
-        <div className="input-group input-group-sm mb-3">
-            <input type="text" className="form-control" placeholder="Username"  id="userName" {...register("userName")}/>
+        <div className="d-flex justify-content-start  mt-1">
+            {errors.commitId && (<p className='text-danger small-text-size '>{`${errors.commitId.message}`}</p>)}  <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        </div>
+        <div className="input-group input-group-sm ">
+            <input type="text" className="form-control" placeholder="Username"  id="userName" {...register("userName",{required: "Username is required", minLength: { value: 3, message: " Username at least 3 letters." }}) }/>
             <span className="input-group-text">@</span>
-            <input type="text" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId")} />
+            <input type="text" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId",{required: "Repository Id is required", minLength: { value: 3, message: " Repository Id at least 3 letters." }})} />
+        </div>
+        <div className="d-flex justify-content-start ">
+            {errors.userName && (<p className='text-danger small-text-size '>{`${errors.userName.message}`}</p>)}
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            {errors.repoId && (<p className='text-danger small-text-size '>{`${errors.repoId.message}`}</p>)}
         </div>
         <div className="input-group input-group-sm mb-3">
             <span className="input-group-text">Description</span>
@@ -70,7 +88,7 @@ const NewCommitSection = () => {
       Uncomment to see how values are populated in the form
       <DevTool control={control}/> 
       */}
-      </div>
+      </React.Fragment>
       
    );
 }
