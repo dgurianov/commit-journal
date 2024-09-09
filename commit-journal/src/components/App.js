@@ -67,7 +67,7 @@ const fetchData = () => {
         </div>
       </div>
       <div className='row'>
-        <div className='col-2'>
+        <div className='col-2 mt-3'>
           <ListOfTags/>
          </div>
          <div className='col '>

@@ -34,7 +34,7 @@ const  Commit = ({element,setShowEdit}) => {
                 <div className='col-2'>
                     <div className="container">
                         <div className='row'>
-                            <label className="badge my-custom-color ">id: {element.commitId}</label>
+                            <label className="badge commit-custom-header-color ">id: {element.commitId}</label>
                         </div>
                        
 
@@ -50,7 +50,7 @@ const  Commit = ({element,setShowEdit}) => {
                 </div>
                 <div className='col'>
                     <div className='row mb-1'>
-                            <label className="badge bg-secondary">repo: {element.repoId}</label>
+                            <label className="badge commit-custom-header-color">repo: {element.repoId}</label>
                     </div>
                     <div className='card'>
                         <div className="card-header card-header-sm">Description</div>

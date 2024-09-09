@@ -23,7 +23,7 @@ const NewCommitSection = () => {
         formState:{errors}} = useForm();
 
     const onSubmit = (formData) => {
-        formData.tags = [...formData.tags.split(" ").map((tagWord)=> {return {"id":tagWord}})];
+        formData.tags = [...formData.tags.trim().split(/ +/).map((tagWord)=> {return {"id":tagWord}})];
 
         const pushCommitToBackend = async () => {
             
@@ -57,9 +57,17 @@ const NewCommitSection = () => {
             {errors.commitId && (<p className='text-danger small-text-size '>{`${errors.commitId.message}`}</p>)}  <div className='small-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         </div>
         <div className="input-group input-group-sm ">
-            <input type="text" className="form-control" placeholder="Username"  id="userName" {...register("userName",{required: "Username is required", minLength: { value: 3, message: " Username at least 3 letters." }}) }/>
+            <input type="text" className="form-control" placeholder="Username"  id="userName" {...register("userName",{
+                required: "Username is required", 
+                minLength: { value: 3, message: "Username at least 3 letters." },
+                maxLength: { value: 12, message: "Username no more than 12 letters." }
+                }) }/>
             <span className="input-group-text">@</span>
-            <input type="text" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId",{required: "Repository Id is required", minLength: { value: 3, message: " Repository Id at least 3 letters." }})} />
+            <input type="text" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId",{
+                required: "Repository Id is required", 
+                minLength: { value: 3, message: "Repository Id at least 3 letters." },
+                maxLength: { value: 12, message: "Repository Id no more than 12 letters." }
+                })} />
         </div>
         <div className="d-flex justify-content-start ">
             {errors.userName && (<p className='text-danger small-text-size '>{`${errors.userName.message}`}</p>)}
@@ -78,7 +86,13 @@ const NewCommitSection = () => {
         </div>
         <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Tags</span>
-                <input type="text"  className="form-control" id="tags" {...register("tags")} />
+                <input type="text"  className="form-control" id="tags" {...register("tags",
+                    {validate: (match) => { return Number(getValues("tags").trim().split(/ +/).filter(e=> e.length > 9)) === 0 || "Tags can be not more then 8 symbols long!" }
+                    }
+                )} />
+        </div>
+        <div>
+        {errors.tags && (<p className='text-danger small-text-size '>{`${errors.tags.message}`}</p>)}
         </div>
         <div className='d-flex justify-content-end '>
             <button  className='btn btn-light btn-sm mb-3 border border-secondary'>Add new</button>

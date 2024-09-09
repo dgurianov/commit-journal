@@ -33,8 +33,8 @@
   grid-auto-columns: minmax(auto,60px); */
   }
   
-  .my-custom-color{
-    background-color: rgba(169, 169, 169, 0.644)
+  .commit-custom-header-color{
+    background-color: rgba(165, 120, 120, 0.747)
   }
    
   .commit-card-buttons{

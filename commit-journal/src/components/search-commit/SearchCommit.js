@@ -11,28 +11,22 @@ import React, { useState } from 'react';
 
 const SearchCommit = () => {
     const setCommitsBucket = useSetRecoilState(commitStateBucket);
-    const [searchState, setSearchState] = useState("");
+    const [searchString, setSearchString] = useState("");
 
-    const handleChange = (event) => {
-        setSearchState(event.target.value);
-
-    }
+    const handleChange = (event) => { setSearchString(event.target.value);}
 
     const clickSearch = (event) => {
-        console.log("Searching...");
-        if(searchState === "") return;
+        if(searchString === "") return;
 
         const searchCommitFromBackend = async () => {
             try{
-                const {data} = await AxiosClient.get(`/api/v1/commit?q=${searchState}`,{headers: {"Content-Type": "application/json"}});
+                const {data} = await AxiosClient.get(`/api/v1/commit?q=${searchString}`,{headers: {"Content-Type": "application/json"}});
                 console.log(data);
                 setCommitsBucket([...data]);
             }catch (error){
                 console.log(error);
             }
     
-            // 
-            // console.log(newCommit);
         }
         searchCommitFromBackend();
         
