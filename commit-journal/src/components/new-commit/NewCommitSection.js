@@ -45,6 +45,8 @@ const NewCommitSection = () => {
         setNbState({...nbState,"search":"active"});
     }
 
+    const handleCancel = () => {setNbState({...nbState,"search":"active"});}
+
 
     return(<React.Fragment>
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -94,8 +96,10 @@ const NewCommitSection = () => {
         <div>
         {errors.tags && (<p className='text-danger small-text-size '>{`${errors.tags.message}`}</p>)}
         </div>
-        <div className='d-flex justify-content-end '>
-            <button  className='btn btn-light btn-sm mb-3 border border-secondary'>Add new</button>
+        <div className='d-flex justify-content-center '>
+            <button  className='btn btn-light btn-sm mb-3 border border-secondary'>Add</button>
+            <span className="mx-1"></span>
+            <button type='button' className='btn btn-light btn-sm mb-3 border border-secondary' onClick={handleCancel} >Cancel</button>
         </div>
       </form>
       {/* 

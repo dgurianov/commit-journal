@@ -14,10 +14,10 @@ public interface CommitRepository extends JpaRepository<Commit, String> {
     @Transactional
     public String deleteByCommitId(String commitId);
 
-    @Query(value="SELECT * FROM COMMIT C WHERE " +
-            "LOWER(C.DESCRIPTION) LIKE LOWER(concat('% ', concat(?1, ' %'))) " +
-            "OR LOWER(C.DESCRIPTION) LIKE LOWER(concat('% ', ?1)) " +
-            "OR LOWER(C.DESCRIPTION) LIKE LOWER(concat(?1, ' %')) " +
-            "OR LOWER(C.DESCRIPTION) LIKE LOWER(?1) ", nativeQuery=true)
+    @Query(value="SELECT * FROM commit c WHERE " +
+            "LOWER(c.description) LIKE LOWER(concat('% ', concat(?1, ' %'))) " +
+            "OR LOWER(c.description) LIKE LOWER(concat('% ', ?1)) " +
+            "OR LOWER(c.description) LIKE LOWER(concat(?1, ' %')) " +
+            "OR LOWER(c.description) LIKE LOWER(?1) ", nativeQuery=true)
     public List<Commit> findByDescription(String matchText);
 }
