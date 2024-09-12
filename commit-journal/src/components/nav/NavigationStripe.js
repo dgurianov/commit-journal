@@ -1,13 +1,10 @@
 
 import { useRecoilState } from 'recoil';
-import './NavigationStripe.css'
 import { navBarState } from '../../state/cjournalState';
 
 const NavigationStripe = () => {
     const [nbState,setNavBarState] = useRecoilState(navBarState);
     
-    
-
     const handleOnclick = (event) => {
             switch(event.target.name){
                 case "search-nav":
@@ -18,7 +15,6 @@ const NavigationStripe = () => {
                     break;
                 default:
                     break;    
-
             }
     }
 
@@ -31,7 +27,6 @@ const NavigationStripe = () => {
                 </li>
             </ul>
         );
-
 }
 
 export default NavigationStripe;

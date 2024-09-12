@@ -15,14 +15,10 @@ const ListOfCommits = () => {
                     <React.Fragment key={element.id}>
                         {showEdit === element.commitId ?   <EditCommit key={element.id}  originalCommit={element} setShowEdit={setShowEdit}/>: <Commit setShowEdit={setShowEdit} key={element.id}  element={element}/>}
                         </React.Fragment>
-                        
                     ) ;
-
             })}
         </div>
     );
-    
-
 }
 
 export default ListOfCommits;

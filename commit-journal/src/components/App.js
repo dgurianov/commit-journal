@@ -1,5 +1,4 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import './App.css';
 import ListOfCommits from './list-commits/ListOfCommits';
 import NewCommitSection from './new-commit/NewCommitSection';
 import SearchCommit from './search-commit/SearchCommit';

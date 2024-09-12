@@ -1,6 +1,5 @@
 
 import { useSetRecoilState } from 'recoil';
-import './SearchCommit.css';
 import { commitStateBucket } from '../../state/cjournalState';
 import AxiosClient from '../backend-client/AxiosClient';
 import React, { useState } from 'react';

@@ -1,8 +1,6 @@
 import { useRecoilValue } from 'recoil';
-import './ListOfTags.css';
 import Tag from './Tag';
 import { tagsStateBucket } from '../../state/cjournalState';
-
 
 const ListOfTags = () => {
     const tagsBasket = useRecoilValue(tagsStateBucket);
