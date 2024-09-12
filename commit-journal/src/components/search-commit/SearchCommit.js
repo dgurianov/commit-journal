@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import './SearchCommit.css';
 import { commitStateBucket } from '../../state/cjournalState';
 import AxiosClient from '../backend-client/AxiosClient';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 const SearchCommit = () => {
     const setCommitsBucket = useSetRecoilState(commitStateBucket);
@@ -12,6 +12,17 @@ const SearchCommit = () => {
 
     const handleChange = (event) => { setSearchString(event.target.value);}
 
+    const searchCommitFromBackend = useCallback(async (backendQuery) => {
+        try {
+            const { data } = await AxiosClient.get(`/api/v1/commit${backendQuery}`, {
+                headers: { "Content-Type": "application/json" }
+            });
+            setCommitsBucket([...data]);
+        } catch (error) {
+            console.error("There was an error while calling backend:", error);
+        }
+    }, [setCommitsBucket]);
+    
     const clickSearch = (event) => {
         let backendQuery = "/";
         if(reset){
@@ -21,18 +32,9 @@ const SearchCommit = () => {
             backendQuery = "?q="+searchString;
             setReset(true);
         }
-
-        const searchCommitFromBackend = async () => {
-            try{
-                const {data} = await AxiosClient.get(`/api/v1/commit${backendQuery}`,{headers: {"Content-Type": "application/json"}});
-                setCommitsBucket([...data]);
-            }catch (error){
-                console.log(error);
-            }
     
-        }
-        searchCommitFromBackend();
-     }
+        searchCommitFromBackend(backendQuery);
+    }
 
     return(
         <React.Fragment >
