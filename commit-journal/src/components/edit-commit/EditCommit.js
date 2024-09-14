@@ -4,6 +4,7 @@ import { commitStateBucket, tagsStateBucket } from "../../state/cjournalState";
 import AxiosClient from "../backend-client/AxiosClient";
 import { useForm } from "react-hook-form";
 import React from "react";
+import CONST from "../CONSTANTS";
 
 const EditCommit = ({originalCommit,setShowEdit}) => {
 
@@ -30,8 +31,7 @@ const EditCommit = ({originalCommit,setShowEdit}) => {
             formData.tags = [...formData.tags.trim().split(/ +/).map((tagWord)=> {return {"id":tagWord}})];
             const pushCommitToBackend = async () => {
                 try{
-                    const {data} = await AxiosClient.put('/api/v1/commit/',JSON.stringify([formData]),{headers: {
-                        "Content-Type": "application/json"}});
+                    const {data} = await AxiosClient.put(CONST.HTTP_COMMIT_RESOURCE + "/",JSON.stringify([formData]));
                     console.log(data);
                     const newTags = new Set(tagsBasket);
                     data[0].tags.forEach(newTag => {
@@ -64,15 +64,17 @@ const EditCommit = ({originalCommit,setShowEdit}) => {
             <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text">User</span>
                     <input type="text" className="form-control" id="userName" {...register("userName",{
-                    required: "Username is required", 
-                    minLength: { value: 3, message: "Username at least 3 letters." },
-                    maxLength: { value: 12, message: "Username no more than 12 letters." }
+                    required: CONST.USERNAME_REQUIRED_MESSAGE, 
+                    minLength: { value: CONST.USERNAME_MIN_LENGTH, message: CONST.USERNAME_MIN_LENGTH_MESSAGE },
+                    maxLength: { value: CONST.USERNAME_MAX_LENGTH, message: CONST.USERNAME_MAX_LENGTH_MESSAGE },
+                    pattern:   { value: CONST.USERNAME_PATTERN ,   message: CONST.USERNAME_PATTERN_MESSAGE}
                     })}/>
                 <span className="input-group-text">@repo</span>
                 <input type="text" className="form-control" id="repoId"{...register("repoId",{
-                    required: "Repository Id is required", 
-                    minLength: { value: 3, message: "Repository Id at least 3 letters." },
-                    maxLength: { value: 12, message: "Repository Id no more than 12 letters." }
+                    required: CONST.REPOID_REQUIRED_MESSAGE, 
+                    minLength: { value: CONST.REPOID_MIN_LENGTH, message: CONST.REPOID_MIN_LENGTH_MESSAGE },
+                    maxLength: { value: CONST.REPOID_MAX_LENGTH, message: CONST.REPOID_MAX_LENGTH_MESSAGE },
+                    pattern:   { value: CONST.REPOID_PATTERN,   message: CONST.REPOID_PATTERN_MESSAGE}
                 })} />
             </div>
             <div className="d-flex justify-content-start ">
@@ -88,13 +90,21 @@ const EditCommit = ({originalCommit,setShowEdit}) => {
             </div>
             <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text">Description</span>
-                <textarea className="form-control"  id="description" {...register("description")} ></textarea>
+                <textarea className="form-control"  id="description" {...register("description",{
+                    required: CONST.DESCRIPTION_REQUIRED_MESSAGE, 
+                    minLength: { value: CONST.DESCRIPTION_MIN_LENGTH, message: CONST.DESCRIPTION_MIN_LENGTH_MESSAGE },
+                    maxLength: { value: CONST.DESCRIPTION_MAX_LENGTH, message: CONST.DESCRIPTION_MAX_LENGTH_MESSAGE },
+                    pattern:   { value: CONST.DESCRIPTION_PATTERN,  message: CONST.DESCRIPTION_PATTERN_MESSAGE}
+                })} ></textarea>
             </div>
 
             <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Tags</span>
                 <input type="text"  className="form-control" id="tags" {...register("tags",
-                    {validate: (match) => {return Number(getValues("tags").trim().split(/ +/).filter(e=> e.length > 9)) === 0 || "Tags can be not more then 8 symbols long!" }}
+                    {
+                        pattern: {value: CONST.TAGS_PATTERN, message: CONST.TAGS_PATTERN_MESSAGE},
+                        validate: (match) => { return Number(getValues("tags").trim().split(/ +/).filter(e=> e.length > 9)) === 0 || CONST.TAGS_MAX_LENGTH_MESSAGE }
+                    }
                 )}/>
             </div>
             <div>

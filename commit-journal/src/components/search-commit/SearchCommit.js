@@ -3,6 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import { commitStateBucket } from '../../state/cjournalState';
 import AxiosClient from '../backend-client/AxiosClient';
 import React, { useState } from 'react';
+import CONST from '../CONSTANTS';
 
 const SearchCommit = () => {
     const setCommitsBucket = useSetRecoilState(commitStateBucket);
@@ -23,7 +24,7 @@ const SearchCommit = () => {
 
         const searchCommitFromBackend = async () => {
             try{
-                const {data} = await AxiosClient.get(`/api/v1/commit${backendQuery}`,{headers: {"Content-Type": "application/json"}});
+                const {data} = await AxiosClient.get(CONST.HTTP_COMMIT_RESOURCE + backendQuery);
                 setCommitsBucket([...data]);
             }catch (error){
                 console.log(error);

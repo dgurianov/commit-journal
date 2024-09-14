@@ -3,6 +3,7 @@ import Tag from "../list-tags/Tag";
 import "./Commit.css";
 import { useRecoilState } from "recoil";
 import { commitStateBucket } from "../../state/cjournalState";
+import CONST from "../CONSTANTS";
 
 const Commit = ({ element, setShowEdit }) => {
   const [commits, setCommitsBucket] = useRecoilState(commitStateBucket);
@@ -11,7 +12,7 @@ const Commit = ({ element, setShowEdit }) => {
         const deleteCommitToBackend = async () => {
             try {
                 const { data } = await AxiosClient.delete(
-                `/api/v1/commit/${event.target.value}`
+                CONST.HTTP_COMMIT_RESOURCE + `/${event.target.value}`
                 );
                 console.log(data);
             } catch (error) {
@@ -24,7 +25,6 @@ const Commit = ({ element, setShowEdit }) => {
     };
 
   const handleEdit = (event) => {
-    console.log("Button triggrered next event:" + event.target);
     setShowEdit(event.target.value);
   };
 

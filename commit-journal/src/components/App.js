@@ -1,12 +1,13 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import ListOfCommits from './list-commits/ListOfCommits';
-import NewCommitSection from './new-commit/NewCommitSection';
+import NewCommitSection from './new-commit/NewCommit';
 import SearchCommit from './search-commit/SearchCommit';
 import { useEffect, useState } from 'react';
 import { commitStateBucket, navBarState, tagsStateBucket } from '../state/cjournalState';
 import ListOfTags from './list-tags/ListOfTags';
 import NavigationStripe from './nav/NavigationStripe';
 import AxiosClient from './backend-client/AxiosClient';
+import CONST from './CONSTANTS';
 
 function App() {
 const nbState = useRecoilValue(navBarState);
@@ -24,7 +25,7 @@ const fetchData = () => {
 
   const loadCommitsFromBackend = async () => {
     try{
-      const {data} = await AxiosClient.get('/api/v1/commit/');
+      const {data} = await AxiosClient.get(CONST.HTTP_COMMIT_RESOURCE + "/");
       setCommitsBucket([...data]);
       const tagArraysFromAllCommits = data.map((commit)=>{return [...commit.tags]});
       const tagsToSaveToState = new Set();

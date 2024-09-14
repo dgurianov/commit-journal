@@ -1,9 +1,10 @@
-import './NewCommitSection.css';
+import './NewCommit.css';
 import AxiosClient from '../backend-client/AxiosClient';
 import { useRecoilState } from 'recoil';
 import { commitStateBucket, navBarState, tagsStateBucket } from '../../state/cjournalState';
 import { useForm } from 'react-hook-form';
 import React from 'react';
+import CONST from '../CONSTANTS';
 
 /*
 Uncomment for devtool
@@ -28,7 +29,7 @@ const NewCommitSection = () => {
         const pushCommitToBackend = async () => {
             
             try{
-                const {data} = await AxiosClient.put('/api/v1/commit/',JSON.stringify([formData]),{headers: {"Content-Type": "application/json"}});
+                const {data} = await AxiosClient.put(CONST.HTTP_COMMIT_RESOURCE + "/",JSON.stringify([formData]));
                 const newTags = new Set(tagsBasket);
                 data[0].tags.forEach(newTag => {
                     newTags.add(newTag.id);
@@ -52,7 +53,12 @@ const NewCommitSection = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group input-group-sm  mt-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Commit id </span>
-                <input type="text" id="commitId" className="form-control" {...register("commitId",{required: "Commit id is required", minLength: { value:1, message: "Commit id must be at least 1 digit."}})}/>
+                <input type="text" id="commitId" className="form-control" {...register("commitId",{
+                    required: CONST.COMMITID_REQUIRED_MESSAGE, 
+                    minLength: { value:CONST.COMMITID_MIN_LENGTH, message: CONST.COMMITID_MIN_LENGTH_MESSAGE},
+                    maxLength: { value: CONST.COMMITID_MAX_LENGTH, message: CONST.COMMITID_MAX_LENGTH_MESSAGE },
+                    pattern:   { value: CONST.COMMITID_PATTERN ,   message: CONST.COMMITID_PATTERN_MESSAGE}
+                       }) }/>
                
         </div>
         <div className="d-flex justify-content-start  mt-1">
@@ -60,19 +66,21 @@ const NewCommitSection = () => {
         </div>
         <div className="input-group input-group-sm ">
             <input type="text" className="form-control" placeholder="Username"  id="userName" {...register("userName",{
-                required: "Username is required", 
-                minLength: { value: 3, message: "Username at least 3 letters." },
-                maxLength: { value: 12, message: "Username no more than 12 letters." }
-                }) }/>
+                required: CONST.USERNAME_REQUIRED_MESSAGE, 
+                minLength: { value: CONST.USERNAME_MIN_LENGTH, message: CONST.USERNAME_MIN_LENGTH_MESSAGE },
+                maxLength: { value: CONST.USERNAME_MAX_LENGTH, message: CONST.USERNAME_MAX_LENGTH_MESSAGE },
+                pattern:   { value: CONST.USERNAME_PATTERN ,   message: CONST.USERNAME_PATTERN_MESSAGE}
+                   }) }/>
             <span className="input-group-text">@</span>
             <input type="text" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId",{
-                required: "Repository Id is required", 
-                minLength: { value: 3, message: "Repository Id at least 3 letters." },
-                maxLength: { value: 12, message: "Repository Id no more than 12 letters." }
+                required: CONST.REPOID_REQUIRED_MESSAGE, 
+                minLength: { value: CONST.REPOID_MIN_LENGTH, message: CONST.REPOID_MIN_LENGTH_MESSAGE },
+                maxLength: { value: CONST.REPOID_MAX_LENGTH, message: CONST.REPOID_MAX_LENGTH_MESSAGE },
+                pattern:   { value: CONST.REPOID_PATTERN,   message: CONST.REPOID_PATTERN_MESSAGE}
                 })} />
         </div>
         <div className="d-flex justify-content-start ">
-            {errors.userName && (<p className='text-danger error-text-size '>{`${errors.userName.message}`}</p>)}
+            {errors.userName && (<p className='text-danger error-text-size mt-1 '>{`${errors.userName.message}`}</p>)}
             <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -80,21 +88,28 @@ const NewCommitSection = () => {
             <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            {errors.repoId && (<p className='text-danger error-text-size '>{`${errors.repoId.message}`}</p>)}
+            {errors.repoId && (<p className='text-danger error-text-size mt-1 '>{`${errors.repoId.message}`}</p>)}
         </div>
         <div className="input-group input-group-sm mb-3">
             <span className="input-group-text">Description</span>
-            <textarea className="form-control"   id="description" {...register("description")}></textarea>
+            <textarea className="form-control"   id="description" {...register("description",{
+                required: CONST.DESCRIPTION_REQUIRED_MESSAGE, 
+                minLength: { value: CONST.DESCRIPTION_MIN_LENGTH, message: CONST.DESCRIPTION_MIN_LENGTH_MESSAGE },
+                maxLength: { value: CONST.DESCRIPTION_MAX_LENGTH, message: CONST.DESCRIPTION_MAX_LENGTH_MESSAGE },
+                pattern:   { value: CONST.DESCRIPTION_PATTERN,  message: CONST.DESCRIPTION_PATTERN_MESSAGE}
+                })}></textarea>
         </div>
         <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Tags</span>
                 <input type="text"  className="form-control" id="tags" {...register("tags",
-                    {validate: (match) => { return Number(getValues("tags").trim().split(/ +/).filter(e=> e.length > 9)) === 0 || "Tags can be not more then 8 symbols long!" }
+                    {
+                        pattern: {value: CONST.TAGS_PATTERN, message: CONST.TAGS_PATTERN_MESSAGE},
+                        validate: (match) => { return Number(getValues("tags").trim().split(/ +/).filter(e=> e.length > 9)) === 0 || CONST.TAGS_MAX_LENGTH_MESSAGE }
                     }
                 )} />
         </div>
-        <div>
-        {errors.tags && (<p className='text-danger error-text-size '>{`${errors.tags.message}`}</p>)}
+        <div className="d-flex justify-content-start ">
+            {errors.tags && (<p className='text-danger error-text-size '>{`${errors.tags.message}`}</p>)}
         </div>
         <div className='d-flex justify-content-center '>
             <button  className='btn btn-light btn-sm mb-3 border border-secondary'>Add</button>
