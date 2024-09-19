@@ -40,9 +40,9 @@ const Commit = ({ element, setShowEdit }) => {
                 </label>
               </div>
               <div className="row ">
-                <div className="col ">
-                  {element.tags.map((el) => {
-                    return <Tag key={el.id} tagname={el.id} />;
+                <div className="col">
+                  {element.tags.map((el, index ) => {
+                    return <div key={index}> <Tag key={el.id} tagname={el.id} /></div>;
                   })}
                 </div>
               </div>

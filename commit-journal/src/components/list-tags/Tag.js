@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRecoilState } from 'recoil';
 import { commitsFilterState } from '../../state/cjournalState';
 import './Tag.css';

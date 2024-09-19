@@ -72,13 +72,17 @@ const config = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   "node_modules"
-  // ],
+   moduleDirectories: [
+     "node_modules",
+     "src"
+   ],
+
+   modulePaths: ['<rootDir>/src/'],
 
   // An array of file extensions your modules use
    moduleFileExtensions: [
      "js",
+     "css",
   //   "mjs",
   //   "cjs",
   //   "jsx",
@@ -91,7 +95,8 @@ const config = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
   "moduleNameMapper": {
-    "^axios$": "axios/dist/node/axios.cjs"
+    "^axios$": "axios/dist/node/axios.cjs",
+    '\\.(css|less)$': '<rootDir>/test/jest/mocks/styleMock.js',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -128,9 +133,9 @@ const config = {
   // rootDir: undefined,
 
   // A list of paths to directories that Jest should use to search for files in
-  // roots: [
-  //   "<rootDir>"
-  // ],
+  roots: [
+    "<rootDir>","src"
+  ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",

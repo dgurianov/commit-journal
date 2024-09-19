@@ -50,10 +50,10 @@ const NewCommitSection = () => {
 
 
     return(<React.Fragment>
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form data-testid='form' onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group input-group-sm  mt-3">
                 <span className="input-group-text" id="inputGroup-sizing-sm">Commit id </span>
-                <input type="text" id="commitId" className="form-control" {...register("commitId",{
+                <input type="text" data-testid="input-commitId" id="commitId" className="form-control" {...register("commitId",{
                     required: CONST.COMMITID_REQUIRED_MESSAGE, 
                     minLength: { value:CONST.COMMITID_MIN_LENGTH, message: CONST.COMMITID_MIN_LENGTH_MESSAGE},
                     maxLength: { value: CONST.COMMITID_MAX_LENGTH, message: CONST.COMMITID_MAX_LENGTH_MESSAGE },
@@ -65,14 +65,14 @@ const NewCommitSection = () => {
             {errors.commitId && (<p className='text-danger error-text-size '>{`${errors.commitId.message}`}</p>)}  <div className='error-text-size ' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         </div>
         <div className="input-group input-group-sm ">
-            <input type="text" className="form-control" placeholder="Username"  id="userName" {...register("userName",{
+            <input type="text" data-testid="input-userName" className="form-control" placeholder="Username"  id="userName" {...register("userName",{
                 required: CONST.USERNAME_REQUIRED_MESSAGE, 
                 minLength: { value: CONST.USERNAME_MIN_LENGTH, message: CONST.USERNAME_MIN_LENGTH_MESSAGE },
                 maxLength: { value: CONST.USERNAME_MAX_LENGTH, message: CONST.USERNAME_MAX_LENGTH_MESSAGE },
                 pattern:   { value: CONST.USERNAME_PATTERN ,   message: CONST.USERNAME_PATTERN_MESSAGE}
                    }) }/>
             <span className="input-group-text">@</span>
-            <input type="text" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId",{
+            <input type="text" data-testid="input-repoId" className="form-control" placeholder="Repository"   id="repoId"  {...register("repoId",{
                 required: CONST.REPOID_REQUIRED_MESSAGE, 
                 minLength: { value: CONST.REPOID_MIN_LENGTH, message: CONST.REPOID_MIN_LENGTH_MESSAGE },
                 maxLength: { value: CONST.REPOID_MAX_LENGTH, message: CONST.REPOID_MAX_LENGTH_MESSAGE },
@@ -92,7 +92,7 @@ const NewCommitSection = () => {
         </div>
         <div className="input-group input-group-sm mb-3">
             <span className="input-group-text">Description</span>
-            <textarea className="form-control"   id="description" {...register("description",{
+            <textarea className="form-control"  data-testid="input-description" id="description" {...register("description",{
                 required: CONST.DESCRIPTION_REQUIRED_MESSAGE, 
                 minLength: { value: CONST.DESCRIPTION_MIN_LENGTH, message: CONST.DESCRIPTION_MIN_LENGTH_MESSAGE },
                 maxLength: { value: CONST.DESCRIPTION_MAX_LENGTH, message: CONST.DESCRIPTION_MAX_LENGTH_MESSAGE },
