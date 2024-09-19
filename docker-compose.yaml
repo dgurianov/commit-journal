@@ -20,6 +20,7 @@ services:
         SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/commitjournal
         SPRING_DATASOURCE_USERNAME: commju_user
         SPRING_DATASOURCE_PASSWORD: commju_user_password
+        SPRING_PROFILES_ACTIVE: dev
   react-app:
       build:
         context: ./commit-journal
